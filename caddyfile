@@ -4,8 +4,9 @@
 
 :{$PORT} {
     root * /app
-    php_server
     
-    # Enable compression
-    encode gzip zstd
+    # Enable PHP handling via FrankenPHP's embedded worker runtime
+    php
+    
+    file_server
 }
