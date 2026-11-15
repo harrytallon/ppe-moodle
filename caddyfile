@@ -5,8 +5,8 @@
 :{$PORT} {
     root * /app
     
-    # Enable PHP handling via FrankenPHP's embedded worker runtime
-    php
+    # Enable standard PHP execution and static file serving
+    php_server
     
     file_server
 }
