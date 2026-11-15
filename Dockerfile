@@ -1,6 +1,5 @@
 FROM dunglas/frankenphp:php8.2-bookworm
 
-# Install required system dependencies and PHP extensions for Moodle
 RUN apt-get update && apt-get install -y \
     libicu-dev \
     libpq-dev \
@@ -17,6 +16,8 @@ RUN apt-get update && apt-get install -y \
         soap \
         opcache
 
-# Copy Moodle source files into the container web root
 COPY . /app
 WORKDIR /app
+
+# Ensure web server can write configuration and installer files
+RUN chown -R www-data:www-data /app /var/www/moodledata
