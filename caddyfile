@@ -1,0 +1,11 @@
+{
+    admin off
+}
+
+:{$PORT} {
+    root * /app
+    php_server
+    
+    # Enable compression
+    encode gzip zstd
+}
