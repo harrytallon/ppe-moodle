@@ -20,4 +20,5 @@ COPY . /app
 WORKDIR /app
 
 # Ensure web server can write configuration and installer files
-RUN chown -R www-data:www-data /app /var/www/moodledata
+RUN mkdir -p /var/www/moodledata \
+    && chown -R www-data:www-data /app /var/www/moodledata
