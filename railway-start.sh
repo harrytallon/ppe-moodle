@@ -1,0 +1,24 @@
+#!/bin/sh
+# Install the Moodle database from the CLI on first boot (the web installer is too slow
+# for Cloudflare's 100s limit), then hand over to FrankenPHP.
+set -e
+cd /app
+mkdir -p /var/www/moodledata
+chown www-data:www-data /var/www/moodledata
+
+installed=$(php -r '
+  $d = new PDO("pgsql:host=".getenv("PGHOST").";port=".(getenv("PGPORT") ?: 5432).";dbname=".getenv("PGDATABASE"), getenv("PGUSER"), getenv("PGPASSWORD"));
+  echo $d->query("SELECT to_regclass(\x27public.mdl_config\x27)")->fetchColumn() ? "yes" : "no";
+' 2>/dev/null || echo error)
+
+if [ "$installed" = "no" ] && [ -n "$MOODLE_ADMIN_PASSWORD" ]; then
+  echo "Installing Moodle database..."
+  su -s /bin/sh www-data -c "php admin/cli/install_database.php --lang=en --adminuser=admin \
+    --adminpass='$MOODLE_ADMIN_PASSWORD' --adminemail='${MOODLE_ADMIN_EMAIL:-admin@example.com}' \
+    --fullname='${MOODLE_FULLNAME:-PPE Moodle}' --shortname='${MOODLE_SHORTNAME:-PPE}' --agree-license" \
+    || echo "Moodle CLI install failed; starting server anyway"
+else
+  echo "Moodle database check: installed=$installed"
+fi
+
+exec docker-php-entrypoint "$@"

@@ -16,9 +16,12 @@ RUN apt-get update && apt-get install -y \
         soap \
         opcache
 
-COPY . /app
+COPY --chown=www-data:www-data . /app
 WORKDIR /app
 
-# Ensure web server can write configuration and installer files
-RUN mkdir -p /var/www/moodledata \
-    && chown -R www-data:www-data /app /var/www/moodledata
+RUN chmod +x /app/railway-start.sh \
+    && mkdir -p /var/www/moodledata \
+    && chown www-data:www-data /var/www/moodledata
+
+ENTRYPOINT ["/app/railway-start.sh"]
+CMD ["--config", "/etc/frankenphp/Caddyfile", "--adapter", "caddyfile"]
