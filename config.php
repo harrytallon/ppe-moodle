@@ -18,7 +18,6 @@ $CFG->dboptions = array (
 );
 
 $CFG->wwwroot   = getenv('MOODLE_WWWROOT') ?: 'https://ppe-moodle.250-hfx.xyz';
-$CFG->dirroot   = __DIR__;
 $CFG->dataroot  = getenv('MOODLE_DATAROOT') ?: '/var/www/moodledata';
 $CFG->admin     = 'admin';
 $CFG->directorypermissions = 02777;
