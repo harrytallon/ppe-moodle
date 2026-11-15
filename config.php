@@ -17,7 +17,7 @@ $CFG->dboptions = array (
 );
 
 $CFG->wwwroot   = 'https://ppe-moodle.250-hfx.xyz';
-$CFG->sslproxy = true;
+$CFG->sslproxy  = true;
 $CFG->dirroot   = '/app';
 $CFG->dataroot  = '/var/www/moodledata';
 $CFG->admin     = 'admin';
