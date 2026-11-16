@@ -21,4 +21,15 @@ else
   echo "Moodle database check: installed=$installed"
 fi
 
+# Moodle needs cron every minute (adhoc tasks, scheduled tasks, email).
+if [ "$installed" != "error" ]; then
+  (
+    sleep 30
+    while true; do
+      su -s /bin/sh www-data -c "php /app/admin/cli/cron.php" >/tmp/moodle-cron.log 2>&1 || true
+      sleep 60
+    done
+  ) &
+fi
+
 exec docker-php-entrypoint "$@"
