@@ -20,7 +20,7 @@ if [ "$installed" = "no" ] && [ -n "$MOODLE_ADMIN_PASSWORD" ]; then
 elif [ "$installed" = "yes" ]; then
   # Pick up new or updated plugins (e.g. qtype_threeshort) without clicking through the admin UI.
   echo "Running Moodle upgrade check..."
-  su -s /bin/sh www-data -c "php admin/cli/upgrade.php --non-interactive" \
+  su -s /bin/sh www-data -c "php admin/cli/upgrade.php --non-interactive --allow-unstable" \
     || echo "Moodle upgrade failed; starting server anyway"
 else
   echo "Moodle database check: installed=$installed"
