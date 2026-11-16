@@ -17,6 +17,11 @@ if [ "$installed" = "no" ] && [ -n "$MOODLE_ADMIN_PASSWORD" ]; then
     --adminpass='$MOODLE_ADMIN_PASSWORD' --adminemail='${MOODLE_ADMIN_EMAIL:-admin@example.com}' \
     --fullname='${MOODLE_FULLNAME:-PPE Moodle}' --shortname='${MOODLE_SHORTNAME:-PPE}' --agree-license" \
     || echo "Moodle CLI install failed; starting server anyway"
+elif [ "$installed" = "yes" ]; then
+  # Pick up new or updated plugins (e.g. qtype_threeshort) without clicking through the admin UI.
+  echo "Running Moodle upgrade check..."
+  su -s /bin/sh www-data -c "php admin/cli/upgrade.php --non-interactive" \
+    || echo "Moodle upgrade failed; starting server anyway"
 else
   echo "Moodle database check: installed=$installed"
 fi
